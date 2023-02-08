@@ -1,0 +1,53 @@
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+body{
+background-image: url("/Images/Yoda\ Background.jpg");
+background-repeat: no-repeat;
+max-width: 100%;
+height: auto;
+}
+
+.containerHeader {
+    text-align: center;
+    font-size: 30px;
+    font-style: italic;
+    margin: 0px;
+    padding: 0px;
+
+}
+
+#search-box {
+    position:absolute;
+    text-align: center;
+    align-items: center;
+}
+
+#search-movie {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: left;
+}
+
+.collection-lastViewed {
+border-color: rgb(126, 212, 13);
+border-width: 7px;
+box-shadow: 2px white;
+padding: 6px;
+}
+
+
+/* A Media Query max-width: 640px */
+@media screen and (max-width: 640px) {
+    /* Resized content to fit 640px  */
+    body {
+           min-width: 640px;
+       }
+   /* Resized main-content to fit 640px  */
+   #main-container {
+       position: absolute;
+       left: 10%;
+
+   }}
+
