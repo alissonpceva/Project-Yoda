@@ -1,7 +1,6 @@
 // ------ This is to have the Search bar log the searched term in a <p> tag to be used while searching in the API
 // ------ This is to have the Search bar log the searched term in a <p> tag to be used while searching in the API
 var searchFormEl = document.querySelector('#search-form');
-var resultContentEl = document.querySelector('#result-content');
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
@@ -69,57 +68,44 @@ function getMovieAPI(searchInputVal) {
             console.log("LINE 67", data)
             // renderMovies(data)
           })
-        .catch(err => {
-          console.error(err);
-        });
-    }
         // create card
-
-        function printResults(resultObj) {
-            console.log(resultObj);
-
-        var resultCard = document.createElement('div');
-  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
-
-  var resultBody = document.createElement('div');
-  resultBody.classList.add('card-body');
-  resultCard.append(resultBody);
-
-  var titleEl = document.createElement('h3');
-  titleEl.textContent = resultObj.title;
-
-  var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
-    '<strong>Date:</strong> ' + resultObj.date + '<br/>';
-
-  if (resultObj.subject) {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> No subject for this entry.';
-  }
-
-  if (resultObj.description) {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong> ' + resultObj.description[0];
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong>  No description for this entry.';
-  }
-
-  var linkButtonEl = document.createElement('a');
-  linkButtonEl.textContent = 'Read More';
-  linkButtonEl.setAttribute('href', resultObj.url);
-  linkButtonEl.classList.add('btn', 'btn-dark');
-
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl);
-
-  resultContentEl.append(resultCard);
-
+        
         // display card 
 
+      }
 
+      // let cards = list.map((item) => {
+      //   console.log(item.id)
+      //   GetDataApiYoda(item.s)
+      //   let rowAlignment = document.createElement("div")
+      //   rowAlignment.classList.add("row")
+      //   let colDiv = document.createElement("div")
+      //   colDiv.classList.add("col-md-6")
+      //    return( `<div class="row">
+      //     <div class="col s12 m7">
+      //       <div id="${item.id} class="card">
+      //         <div class="card-image">
+      //           <img src="${item.i.imageUrl}"
+      //           <span class="card-title">${item.l}</span>
+      //         </div>
+      //         <div class="card-content">
+      //           <p>${item.r}</p>
+      //           <p>rank:${item.rank}</p>
+      //           <p>year:${item.y}</p>
+      //         </div>
+      //         <div class="card-action">
+      //           <a href="#">This is a link</a>
+      //         </div>
+      //       </div>
+      //     </div>
+      //   </div>
+      // `)
+      //} )
+      // document.getElementById("alignment").innerHTML = cards
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
 // -----Fetch the Yoda API------//
 const options = {
@@ -132,4 +118,38 @@ const options = {
 fetch("https://rapidalex-i-am-groot-v1.p.rapidapi.com/grootSpeak", options)
   .then((response) => response.json())
   .then((response) => console.log(response))
-  .catch((err) => console.error(err))})
+  .catch((err) => console.error(err))
+
+// ----- This is to render cards to the page after searching------//
+const cardsContainer = $('#cards-container')
+function renderMovies(movieObject) {
+  movieObject.plots.forEach(plot => {
+    const div = $('div');
+    const image = $('img');
+    const title = $('h3');
+    const description = $('h3');
+
+    console.log(plot)
+
+    // ---CSS for Cards---//
+    div.classList = 'card'
+    image.classList = 'card-img'
+
+    image.src = plot.image
+    title.innerText = `Title: ${plot.title} `
+    description.innerText = ` Description: ${plot.description} `
+    div.append(image)
+    div.append(title)
+    div.append(description)
+    cardsContainer.appendChild(div)
+  });
+};
+
+function GetDataApiYoda(text) {
+  let apiURL = `https://api.funtranslations.com/translate/yoda.json?text=${text}`
+  fetch(apiURL)
+    .then(response => response.json())
+    .then(apiResults => {
+      console.log(apiResults)
+    })
+}
