@@ -1,29 +1,15 @@
-// ------ This is to have the Search bar log the searched term in a <p> tag to be used while searching in the API
-// ------ This is to have the Search bar log the searched term in a <p> tag to be used while searching in the API
 var searchFormEl = document.querySelector('#search-form');
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
   
-  // if ($("#search-movie")) {
-  //   $("#search-movie").remove()
-  // }
-  // if ($("#search-movie")) {
-  //   $("#search-movie").remove()
-  // }
-
   var searchInputVal = document.querySelector('#search-input').value;
 
   if (!searchInputVal) {
     console.error('You need a search input value!');
     return;
   }
-  // alert("Search input val" + searchInputVal)
-  // var p = $("<p>")
-  // p.text(searchInputVal);
-  // p.attr("id", "search-movie")
-  // var searchResults = $("#Searchresults")
-  // searchResults.append(p)
+
   getMovieAPI(searchInputVal)
 }
 
@@ -31,7 +17,6 @@ searchFormEl.addEventListener("submit", handleSearchFormSubmit)
 
 function getMovieAPI(searchInputVal) {
   // ----- Fetch the IMDB Top 100 API  tt0416449-----//
-  //let queryURL ='https://online-movie-database.p.rapidapi.com/title/get-details?tconst=tt0416449'
   let queryURL = 'https://online-movie-database.p.rapidapi.com/auto-complete?q=' + searchInputVal
   fetch(queryURL, {
     "method": 'GET',
@@ -74,34 +59,6 @@ function getMovieAPI(searchInputVal) {
 
       }
 
-      // let cards = list.map((item) => {
-      //   console.log(item.id)
-      //   GetDataApiYoda(item.s)
-      //   let rowAlignment = document.createElement("div")
-      //   rowAlignment.classList.add("row")
-      //   let colDiv = document.createElement("div")
-      //   colDiv.classList.add("col-md-6")
-      //    return( `<div class="row">
-      //     <div class="col s12 m7">
-      //       <div id="${item.id} class="card">
-      //         <div class="card-image">
-      //           <img src="${item.i.imageUrl}"
-      //           <span class="card-title">${item.l}</span>
-      //         </div>
-      //         <div class="card-content">
-      //           <p>${item.r}</p>
-      //           <p>rank:${item.rank}</p>
-      //           <p>year:${item.y}</p>
-      //         </div>
-      //         <div class="card-action">
-      //           <a href="#">This is a link</a>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   </div>
-      // `)
-      //} )
-      // document.getElementById("alignment").innerHTML = cards
     })
     .catch(err => {
       console.error(err);
