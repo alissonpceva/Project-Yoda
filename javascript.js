@@ -1,8 +1,9 @@
 var searchFormEl = document.querySelector('#search-form');
+var resultContentEl = document.querySelector('#cards-container');
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
-  
+
   var searchInputVal = document.querySelector('#search-input').value;
 
   if (!searchInputVal) {
@@ -34,7 +35,7 @@ function getMovieAPI(searchInputVal) {
       const list = data.d[0];
       console.log("LINE 50", list)
 
-      for (var i = 0; i < 4; i++){
+      for (var i = 0; i < 4; i++) {
         // get plot
         console.log(i);
 
@@ -51,10 +52,15 @@ function getMovieAPI(searchInputVal) {
           })
           .then(data => {
             console.log("LINE 67", data)
+            {
+              console.log(data.base.title)
+              printResults(data.base[i]);
+              printResults(data.plots[i]);
+            }
             // renderMovies(data)
           })
-        // create card
-        
+
+
         // display card 
 
       }
@@ -63,6 +69,48 @@ function getMovieAPI(searchInputVal) {
     .catch(err => {
       console.error(err);
     });
+}
+
+
+// create card 
+function printResults(resultObj) {
+  console.log(resultObj);
+
+  // set up `<div>` to hold result content
+  var resultCard = document.createElement('div');
+  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+
+  var resultBody = document.createElement('div');
+  resultBody.classList.add('card-body');
+  resultCard.append(resultBody);
+
+  var titleEl = document.createElement('h3');
+  titleEl.textContent = resultObj.title;
+
+  var imgEl = document.createElement('img');
+  imgEl.textContent = resultObj.img;
+
+  var bodyContentEl = document.createElement('p');
+  bodyContentEl.innerHTML =
+    '<strong>Date:</strong> ' + resultObj.year + '<br/>';
+
+  if (resultObj.subject) {
+    bodyContentEl.innerHTML +=
+      '<strong>Subjects:</strong> ' + resultObj.plot;
+  } else {
+    bodyContentEl.innerHTML +=
+      '<strong>Subjects:</strong> No subject for this entry.';
+  }
+
+
+  var linkButtonEl = document.createElement('a');
+  linkButtonEl.textContent = 'Read More';
+  linkButtonEl.setAttribute('href', resultObj.url);
+  linkButtonEl.classList.add('btn', 'btn-dark');
+
+  resultBody.append(titleEl, imgEl, bodyContentEl, linkButtonEl);
+
+  resultContentEl.append(resultCard);
 }
 // -----Fetch the Yoda API------//
 const options = {
