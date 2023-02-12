@@ -22,7 +22,7 @@ function getMovieAPI(searchInputVal) {
   fetch(queryURL, {
     "method": 'GET',
     headers: {
-      'X-RapidAPI-Key': 'b3e59746a5mshc0979fd711196a9p14039bjsn78f8f7f86bba',
+      'X-RapidAPI-Key': 'f870a2f23bmsh9eda1e7be572773p1a63bfjsn838fbce364f9',
       'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
     }
   })
@@ -43,7 +43,7 @@ function getMovieAPI(searchInputVal) {
         fetch(queryURL2, {
           "method": 'GET',
           headers: {
-            'X-RapidAPI-Key': 'b3e59746a5mshc0979fd711196a9p14039bjsn78f8f7f86bba',
+            'X-RapidAPI-Key': 'f870a2f23bmsh9eda1e7be572773p1a63bfjsn838fbce364f9',
             'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
           }
         })
@@ -73,7 +73,7 @@ function getMovieAPI(searchInputVal) {
 }
 
 
-// create card 
+// These are the containers for the cards
 function printResults(resultObj) {
   console.log(resultObj);
 
@@ -81,39 +81,45 @@ function printResults(resultObj) {
   var resultCard = document.createElement('div');
   resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
 
+  // - Body of the Card
   var resultBody = document.createElement('div');
   resultBody.classList.add('card-body');
   resultCard.append(resultBody);
 
+  // - Title of the Card
   var titleEl = document.createElement('h3');
   titleEl.textContent = resultObj.title;
 
+  // - Image of the movie for the Card
   var imgEl = document.createElement('img');
   imgEl.textContent = resultObj.img;
 
-  var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
+  // - Year the movie came out
+  var plotEl = document.createElement('p');
+  plotEl.innerHTML =
     '<strong>Date:</strong> ' + resultObj.year + '<br/>';
 
+  // - Plot of the movie for the card
   if (resultObj.subject) {
-    bodyContentEl.innerHTML +=
+    plotEl.innerHTML +=
       '<strong>Subjects:</strong> ' + resultObj.plot;
   } else {
-    bodyContentEl.innerHTML +=
+    plotEl.innerHTML +=
       '<strong>Subjects:</strong> No subject for this entry.';
   }
 
-
+//  - Create the the div for a link to an IMDB page for more information
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'Read More';
   linkButtonEl.setAttribute('href', resultObj.url);
   linkButtonEl.classList.add('btn', 'btn-dark');
 
-  resultBody.append(titleEl, imgEl, bodyContentEl, linkButtonEl);
+  resultBody.append(titleEl, imgEl, plotEl, linkButtonEl);
 
   resultContentEl.append(resultCard);
 }
-
+// --- This is to create the click function on the search! bar to render the cards to the homepage
+searchFormEl.addEventListener("submit", printResults);
 
 function GetDataApiYoda(text) {
   let apiURL = `https://api.funtranslations.com/translate/yoda.json?text=${text}`
