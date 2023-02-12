@@ -56,6 +56,7 @@ function getMovieAPI(searchInputVal) {
               console.log(data.base.title)
               printResults(data.base[i]);
               printResults(data.plots[i]);
+              console.log(data.plots)
             }
             // renderMovies(data)
           })
@@ -112,43 +113,7 @@ function printResults(resultObj) {
 
   resultContentEl.append(resultCard);
 }
-// -----Fetch the Yoda API------//
-const options = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Key": "b3e59746a5mshc0979fd711196a9p14039bjsn78f8f7f86bba",
-    "X-RapidAPI-Host": "rapidalex-i-am-groot-v1.p.rapidapi.com",
-  },
-};
-fetch("https://rapidalex-i-am-groot-v1.p.rapidapi.com/grootSpeak", options)
-  .then((response) => response.json())
-  .then((response) => console.log(response))
-  .catch((err) => console.error(err))
 
-// ----- This is to render cards to the page after searching------//
-const cardsContainer = $('#cards-container')
-function renderMovies(movieObject) {
-  movieObject.plots.forEach(plot => {
-    const div = $('div');
-    const image = $('img');
-    const title = $('h3');
-    const description = $('h3');
-
-    console.log(plot)
-
-    // ---CSS for Cards---//
-    div.classList = 'card'
-    image.classList = 'card-img'
-
-    image.src = plot.image
-    title.innerText = `Title: ${plot.title} `
-    description.innerText = ` Description: ${plot.description} `
-    div.append(image)
-    div.append(title)
-    div.append(description)
-    cardsContainer.appendChild(div)
-  });
-};
 
 function GetDataApiYoda(text) {
   let apiURL = `https://api.funtranslations.com/translate/yoda.json?text=${text}`
