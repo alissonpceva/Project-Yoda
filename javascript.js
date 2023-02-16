@@ -1,5 +1,5 @@
 var searchFormEl = document.querySelector('#search-form');
-var resultContentEl = document.querySelector('#cards-container');
+var resultContentEl = document.querySelector('#result-content');
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
@@ -54,9 +54,10 @@ function getMovieAPI(searchInputVal) {
             console.log("LINE 67", data)
             {
               console.log(data.base.title)
-              printResults(data.base[i]);
-              printResults(data.plots[i]);
+              printResults(data.base, data.plots[0]);
+              
               console.log(data.plots)
+              console.log(data.base.image)
             }
             // renderMovies(data)
           })
@@ -74,7 +75,7 @@ function getMovieAPI(searchInputVal) {
 
 
 // These are the containers for the cards
-function printResults(resultObj) {
+function printResults(resultObj, reviewObj) {
   console.log(resultObj);
 
   // set up `<div>` to hold result content
@@ -92,21 +93,30 @@ function printResults(resultObj) {
 
   // - Image of the movie for the Card
   var imgEl = document.createElement('img');
-  imgEl.textContent = resultObj.img;
+  imgEl.textContent = resultObj.image.url;
 
   // - Year the movie came out
   var plotEl = document.createElement('p');
   plotEl.innerHTML =
     '<strong>Date:</strong> ' + resultObj.year + '<br/>';
 
+console.log('review objects', reviewObj)
+
   // - Plot of the movie for the card
-  if (resultObj.subject) {
+  if (reviewObj.text) {
     plotEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.plot;
+      '<strong>Subjects:</strong> ' + reviewObj.text;
   } else {
     plotEl.innerHTML +=
       '<strong>Subjects:</strong> No subject for this entry.';
   }
+
+  var yodaButton = document.createElement('button')
+  yodaButton.textContent = "Yoda Reviews!"
+  yodaButton.addEventListener("click", function(){
+   console.log( GetDataApiYoda (reviewObj.text,plotEl))
+  })
+
 
 //  - Create the the div for a link to an IMDB page for more information
   var linkButtonEl = document.createElement('a');
@@ -114,18 +124,28 @@ function printResults(resultObj) {
   linkButtonEl.setAttribute('href', resultObj.url);
   linkButtonEl.classList.add('btn', 'btn-dark');
 
-  resultBody.append(titleEl, imgEl, plotEl, linkButtonEl);
-
+  resultBody.append(titleEl, imgEl, yodaButton, plotEl, linkButtonEl);
+  resultCard.append(resultBody);
+  console.log("testing render to page")
   resultContentEl.append(resultCard);
+
+  return resultCard;
+
 }
+
+table.appendChild(printResults)
+
 // --- This is to create the click function on the search! bar to render the cards to the homepage
 searchFormEl.addEventListener("submit", printResults);
 
-function GetDataApiYoda(text) {
+function GetDataApiYoda(text, plotEl) {
   let apiURL = `https://api.funtranslations.com/translate/yoda.json?text=${text}`
-  fetch(apiURL)
+
+  return fetch(apiURL)
     .then(response => response.json())
     .then(apiResults => {
       console.log(apiResults)
+      plotEl.innerHTML = apiResults.contents.translated
+      return apiResults
     })
 }

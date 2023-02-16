@@ -20,6 +20,7 @@ height: 800px;
     text-align: center;
     font-size: 30px;
     font-style: italic;
+    
 }
 
 #search-box {
@@ -35,7 +36,15 @@ height: 800px;
     align-items: left;
 }
 
+#result-content {
+    background-color: rgba(180, 33, 33, 0);
+    display: flex;
+    justify-content: space-around;
+}
 
+.card {
+border-radius: 10% /50%;
+}
 /* A Media Query max-width: 640px */
 @media screen and (max-width: 640px) {
     /* Resized content to fit 640px  */
