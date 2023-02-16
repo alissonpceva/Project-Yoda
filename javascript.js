@@ -1,5 +1,5 @@
 var searchFormEl = document.querySelector('#search-form');
-var resultContentEl = document.querySelector('#cards-container');
+var resultContentEl = document.querySelector('#result-content');
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
@@ -22,7 +22,7 @@ function getMovieAPI(searchInputVal) {
   fetch(queryURL, {
     "method": 'GET',
     headers: {
-      'X-RapidAPI-Key': 'b3e59746a5mshc0979fd711196a9p14039bjsn78f8f7f86bba',
+      'X-RapidAPI-Key': 'f870a2f23bmsh9eda1e7be572773p1a63bfjsn838fbce364f9',
       'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
     }
   })
@@ -43,7 +43,7 @@ function getMovieAPI(searchInputVal) {
         fetch(queryURL2, {
           "method": 'GET',
           headers: {
-            'X-RapidAPI-Key': 'b3e59746a5mshc0979fd711196a9p14039bjsn78f8f7f86bba',
+            'X-RapidAPI-Key': 'f870a2f23bmsh9eda1e7be572773p1a63bfjsn838fbce364f9',
             'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
           }
         })
@@ -54,9 +54,10 @@ function getMovieAPI(searchInputVal) {
             console.log("LINE 67", data)
             {
               console.log(data.base.title)
-              printResults(data.base[i]);
-              printResults(data.plots[i]);
+              printResults(data.base, data.plots[0]);
+              
               console.log(data.plots)
+              console.log(data.base.image)
             }
             // renderMovies(data)
           })
@@ -73,53 +74,78 @@ function getMovieAPI(searchInputVal) {
 }
 
 
-// create card 
-function printResults(resultObj) {
+// These are the containers for the cards
+function printResults(resultObj, reviewObj) {
   console.log(resultObj);
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement('div');
   resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
 
+  // - Body of the Card
   var resultBody = document.createElement('div');
   resultBody.classList.add('card-body');
   resultCard.append(resultBody);
 
+  // - Title of the Card
   var titleEl = document.createElement('h3');
   titleEl.textContent = resultObj.title;
 
+  // - Image of the movie for the Card
   var imgEl = document.createElement('img');
-  imgEl.textContent = resultObj.img;
+  imgEl.textContent = resultObj.image.url;
 
-  var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
+  // - Year the movie came out
+  var plotEl = document.createElement('p');
+  plotEl.innerHTML =
     '<strong>Date:</strong> ' + resultObj.year + '<br/>';
 
-  if (resultObj.subject) {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.plot;
+console.log('review objects', reviewObj)
+
+  // - Plot of the movie for the card
+  if (reviewObj.text) {
+    plotEl.innerHTML +=
+      '<strong>Subjects:</strong> ' + reviewObj.text;
   } else {
-    bodyContentEl.innerHTML +=
+    plotEl.innerHTML +=
       '<strong>Subjects:</strong> No subject for this entry.';
   }
 
+  var yodaButton = document.createElement('button')
+  yodaButton.textContent = "Yoda Reviews!"
+  yodaButton.addEventListener("click", function(){
+   console.log( GetDataApiYoda (reviewObj.text,plotEl))
+  })
 
+
+//  - Create the the div for a link to an IMDB page for more information
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'Read More';
   linkButtonEl.setAttribute('href', resultObj.url);
   linkButtonEl.classList.add('btn', 'btn-dark');
 
-  resultBody.append(titleEl, imgEl, bodyContentEl, linkButtonEl);
-
+  resultBody.append(titleEl, imgEl, yodaButton, plotEl, linkButtonEl);
+  resultCard.append(resultBody);
+  console.log("testing render to page")
   resultContentEl.append(resultCard);
+
+  return resultCard;
+
 }
 
+table.appendChild(printResults)
 
-function GetDataApiYoda(text) {
+// --- This is to create the click function on the search! bar to render the cards to the homepage
+searchFormEl.addEventListener("submit", printResults);
+
+function GetDataApiYoda(text, plotEl) {
   let apiURL = `https://api.funtranslations.com/translate/yoda.json?text=${text}`
-  fetch(apiURL)
+
+  return fetch(apiURL)
     .then(response => response.json())
     .then(apiResults => {
       console.log(apiResults)
+      plotEl.innerHTML = apiResults.contents.translated
+      return apiResults
     })
 }
